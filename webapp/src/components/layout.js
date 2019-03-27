@@ -8,8 +8,10 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { StaticQuery, graphql } from "gatsby"
+import { Provider, Grid } from "reakit"
 
 import Header from "./header"
+import { CenterColumn, theme } from "../styles"
 import "./layout.css"
 
 const Layout = ({ children }) => (
@@ -24,24 +26,23 @@ const Layout = ({ children }) => (
       }
     `}
     render={data => (
-      <>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <div
-          style={{
-            margin: `0 auto`,
-            maxWidth: 960,
-            padding: `0px 1.0875rem 1.45rem`,
-            paddingTop: 0,
-          }}
-        >
-          <main>{children}</main>
-          <footer>
-            © {new Date().getFullYear()}, Built with
-            {` `}
-            <a href="https://www.gatsbyjs.org">Gatsby</a>
-          </footer>
-        </div>
-      </>
+      <Provider theme={theme}>
+        <Grid templateRows="120px 1fr 20px" style={{ minHeight: "700px" }}>
+          <Grid.Item>
+            <Header siteTitle={data.site.siteMetadata.title} />
+          </Grid.Item>
+          <Grid.Item>
+            <CenterColumn as="main">{children}</CenterColumn>
+          </Grid.Item>
+          <Grid.Item>
+            <CenterColumn as="footer">
+              © {new Date().getFullYear()}, Built with
+              {` `}
+              <a href="https://www.gatsbyjs.org">Gatsby</a>
+            </CenterColumn>
+          </Grid.Item>
+        </Grid>
+      </Provider>
     )}
   />
 )

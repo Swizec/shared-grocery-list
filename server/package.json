@@ -1,0 +1,13 @@
+{
+  "name": "shared-grocery-list-backend",
+  "version": "1.0.0",
+  "description": "A shared grocery list for you and your friends – the lambdas part",
+  "main": "index.js",
+  "repository": "https://github.com/Swizec/shared-grocery-list",
+  "author": "Swizec Teller",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.429.0",
+    "graphql": "^14.2.0"
+  }
+}

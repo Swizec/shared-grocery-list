@@ -1,0 +1,21 @@
+service: grocerylist-api
+
+provider:
+    name: aws
+    runtime: nodejs8.10
+    environment:
+        DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - dynamodb: GetItem
+              - dynamodb: UpdateItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+    query:
+        handler: handler.query
+        events:
+            - http:
+                  path: query
+                  method: get

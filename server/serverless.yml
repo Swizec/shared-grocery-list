@@ -8,8 +8,8 @@ provider:
     iamRoleStatements:
         - Effect: Allow
           Action:
-              - dynamodb: GetItem
-              - dynamodb: UpdateItem
+              - dynamodb:GetItem
+              - dynamodb:UpdateItem
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
@@ -19,3 +19,19 @@ functions:
             - http:
                   path: query
                   method: get
+
+resources:
+    Resources:
+        NicknamesTable:
+            Type: "AWS::DynamoDB::Table"
+            Properties:
+                AttributeDefinitions:
+                    - AttributeName: firstName
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: firstName
+                      KeyType: HASH
+                ProvisionedThroughput:
+                    ReadCapacityUnits: 1
+                    WriteCapacityUnits: 1
+                TableName: ${self:provider.environment.DYNAMODB_TABLE}

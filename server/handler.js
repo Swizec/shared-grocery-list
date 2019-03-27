@@ -5,21 +5,41 @@ const {
     GraphQLNonNull,
     GraphQLString
 } = require("graphql");
-const { promisify } = require("util");
 
-const AWS = require("asw-sdk");
+const AWS = require("aws-sdk");
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
+// These are here because I couldn't get aws-sdk Promise support to work
+// Neither did node's promisify work
+const updateItem = params =>
+    new Promise((resolve, reject) => {
+        dynamoDb.update(params, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+
+const getItem = params =>
+    new Promise((resolve, reject) => {
+        dynamoDb.get(params, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+
 const getGreeting = async firstName => {
-    const result = await promisify(callback =>
-        dynamoDb.get(
-            {
-                TableName: process.env.DYNAMODB_TABLE,
-                Key: { firstName }
-            },
-            callback
-        )
-    );
+    const result = await getItem({
+        TableName: process.env.DYNAMODB_TABLE,
+        Key: { firstName }
+    });
+
+    console.log("ITEM", result);
 
     let name = firstName;
     if (result.Item) {
@@ -29,22 +49,15 @@ const getGreeting = async firstName => {
     return `Hello, ${name}`;
 };
 
-const changeNickname = async (firstName, nickname) => {
-    await promisify(callback =>
-        dynamoDb.update(
-            {
-                TableName: process.env.DYNAMODB_TABLE,
-                Key: { firstName },
-                UpdateExpression: "SET nickname = :nickname",
-                ExpressionAttributeValues: {
-                    ":nickname": nickname
-                }
-            },
-            callback
-        )
-    );
-
-    return nickname;
+const changeNickname = (firstName, nickname) => {
+    return updateItem({
+        TableName: process.env.DYNAMODB_TABLE,
+        Key: { firstName },
+        UpdateExpression: "SET nickname = :nickname",
+        ExpressionAttributeValues: {
+            ":nickname": nickname
+        }
+    }).then(result => nickname);
 };
 
 const schema = new GraphQLSchema({

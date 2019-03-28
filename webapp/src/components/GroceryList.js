@@ -3,7 +3,7 @@ import { Box, Paragraph, Heading, Input, Flex, Button, styled } from "reakit"
 import { theme } from "styled-tools"
 import posed, { PoseGroup } from "react-pose"
 import gql from "graphql-tag"
-import { useMutation } from "react-apollo-hooks"
+import { useMutation, useApolloClient } from "react-apollo-hooks"
 
 const Title = styled(Input)`
   font-weight: bold;
@@ -39,16 +39,12 @@ const Strike = styled.span`
   }
 `
 
-const SAVE_LIST = gql`
-  mutation {
-    changeGroceryList(
-      listId: "bla"
-      groceries: [
-        { itemName: "beer", key: "123", done: false }
-        { itemName: "vodka", key: "124", done: false }
-        { itemName: "juice", key: "125", done: false }
-      ]
-    )
+const SAVE_QUERY = gql`
+  mutation changeGroceryList(
+    $listId: String!
+    $groceries: [GroceryListInputItem]
+  ) {
+    changeGroceryList(listId: $listId, groceries: $groceries)
   }
 `
 
@@ -115,9 +111,9 @@ const GroceryList = ({ listId, initialState = [] }) => {
   const [listName, setListName] = useState("")
   const [list, dispatch] = useReducer(reducer, initialState)
 
-  const saveList = useMutation(SAVE_LIST, {
+  const saveList = useMutation(SAVE_QUERY, {
     variables: {
-      listId: "bla",
+      listId: listId,
       groceries: list,
     },
   })

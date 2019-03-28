@@ -4,7 +4,7 @@ provider:
     name: aws
     runtime: nodejs8.10
     environment:
-        DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+        DYNAMODB_TABLE: ${self:service}-db-${self:provider.stage}
     iamRoleStatements:
         - Effect: Allow
           Action:
@@ -23,14 +23,14 @@ functions:
 
 resources:
     Resources:
-        NicknamesTable:
+        GroceryListsTable:
             Type: "AWS::DynamoDB::Table"
             Properties:
                 AttributeDefinitions:
-                    - AttributeName: firstName
+                    - AttributeName: listId
                       AttributeType: S
                 KeySchema:
-                    - AttributeName: firstName
+                    - AttributeName: listId
                       KeyType: HASH
                 ProvisionedThroughput:
                     ReadCapacityUnits: 1

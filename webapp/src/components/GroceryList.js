@@ -98,7 +98,7 @@ const NewItem = ({ dispatch }) => {
   )
 }
 
-const GroceryList = () => {
+const GroceryList = ({ listId }) => {
   const [listName, setListName] = useState("")
   const [list, dispatch] = useReducer(reducer, initialState)
 

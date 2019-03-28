@@ -9,7 +9,7 @@ import GroceryList from "../components/GroceryList"
 const IndexPage = () => (
   <Layout>
     <SEO title="🛍" keywords={[`gatsby`, `application`, `react`]} />
-    <GroceryList />
+    <GroceryList listId="bla" />
   </Layout>
 )
 

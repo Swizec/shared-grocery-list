@@ -20,6 +20,9 @@ functions:
             - http:
                   path: query
                   method: get
+            - http:
+                  path: query
+                  method: post
 
 resources:
     Resources:

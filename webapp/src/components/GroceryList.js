@@ -37,8 +37,6 @@ const Strike = styled.span`
   }
 `
 
-const initialState = []
-
 function reducer(state, action) {
   const index = action.index
 
@@ -47,7 +45,7 @@ function reducer(state, action) {
       return [
         ...state,
         {
-          item: action.item,
+          itemName: action.itemName,
           key: new Date().toISOString(),
         },
       ]
@@ -64,11 +62,11 @@ function reducer(state, action) {
   }
 }
 
-const ListItem = ({ dispatch, item, done }) => {
+const ListItem = ({ dispatch, itemName, done }) => {
   return (
     <Item justifyContent="space-between">
       <ItemName as="span" onClick={() => dispatch("toggleDone")}>
-        {done ? <Strike>{item}</Strike> : item}
+        {done ? <Strike>{itemName}</Strike> : itemName}
       </ItemName>
       <Button opaque={false} onClick={() => dispatch("remove")}>
         ❌
@@ -78,17 +76,17 @@ const ListItem = ({ dispatch, item, done }) => {
 }
 
 const NewItem = ({ dispatch }) => {
-  const [item, setItem] = useState("")
+  const [itemName, setItem] = useState("")
 
   function addItem() {
-    dispatch({ type: "addItem", item })
+    dispatch({ type: "addItem", itemName })
     setItem("")
   }
 
   return (
     <Flex>
       <Input
-        value={item}
+        value={itemName}
         onChange={event => setItem(event.target.value)}
         onKeyPress={({ key }) => (key === "Enter" ? addItem() : null)}
         placeholder="What do you need to buy? 🛍"
@@ -98,7 +96,7 @@ const NewItem = ({ dispatch }) => {
   )
 }
 
-const GroceryList = ({ listId }) => {
+const GroceryList = ({ listId, initialState = [] }) => {
   const [listName, setListName] = useState("")
   const [list, dispatch] = useReducer(reducer, initialState)
 

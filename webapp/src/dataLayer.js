@@ -56,7 +56,7 @@ function reducer(state, action) {
   }
 }
 
-export function useListState({ listId, initialState }) {
+export function useListState({ listId, initialState = {} }) {
   const [listName, setListName] = useState(initialState.listName)
   const [loading, setLoading] = useState(false)
   const [fetched, setFetched] = useState(false)

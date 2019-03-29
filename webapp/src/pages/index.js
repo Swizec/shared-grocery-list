@@ -5,7 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import GroceryList from "../components/GroceryList"
 
-const IndexPage = ({ data }) => (
+const IndexPage = ({ data = {} }) => (
   <Layout>
     <SEO title="🛍" keywords={[`gatsby`, `application`, `react`]} />
     <GroceryList listId="bla" initialState={data.groceryapi.groceryList} />
@@ -18,9 +18,12 @@ export const query = graphql`
   query {
     groceryapi {
       groceryList(listId: "bla") {
-        itemName
-        key
-        done
+        listName
+        groceries {
+          itemName
+          key
+          done
+        }
       }
     }
   }

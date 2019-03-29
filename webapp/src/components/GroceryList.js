@@ -107,9 +107,10 @@ const NewItem = ({ dispatch }) => {
   )
 }
 
-const GroceryList = ({ listId, initialState = [] }) => {
-  const [listName, setListName] = useState("")
-  const [list, dispatch] = useReducer(reducer, initialState)
+const GroceryList = ({ listId, initialState }) => {
+  console.log(initialState)
+  const [listName, setListName] = useState(initialState.listName)
+  const [list, dispatch] = useReducer(reducer, initialState.groceries)
 
   const saveList = useMutation(SAVE_QUERY, {
     variables: {

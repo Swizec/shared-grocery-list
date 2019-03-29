@@ -25,6 +25,17 @@ const getItem = params =>
         });
     });
 
+const scanItems = params =>
+    new Promise((resolve, reject) => {
+        dynamoDb.scan(params, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+
 const getGroceryList = async listId => {
     const result = await getItem({
         TableName: process.env.DYNAMODB_TABLE,
@@ -32,6 +43,16 @@ const getGroceryList = async listId => {
     });
 
     return result.Item.groceries;
+};
+
+const getAllGroceryList = async () => {
+    const result = await scanItems({
+        TableName: process.env.DYNAMODB_TABLE
+    });
+
+    console.log(result);
+
+    return result.Items;
 };
 
 const changeGroceryList = (listId, groceries) => {
@@ -50,4 +71,4 @@ const changeGroceryList = (listId, groceries) => {
         });
 };
 
-module.exports = { getGroceryList, changeGroceryList };
+module.exports = { getGroceryList, changeGroceryList, getAllGroceryList };

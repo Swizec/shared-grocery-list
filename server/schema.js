@@ -8,7 +8,11 @@ const {
     GraphQLBoolean
 } = require("graphql");
 
-const { getGroceryList, changeGroceryList } = require("./dynamodb");
+const {
+    getGroceryList,
+    getAllGroceryList,
+    changeGroceryList
+} = require("./dynamodb");
 
 const GraphQLItem = new GraphQLObjectType({
     name: "GroceryListItem",
@@ -16,6 +20,13 @@ const GraphQLItem = new GraphQLObjectType({
         itemName: { type: new GraphQLNonNull(GraphQLString) },
         key: { type: new GraphQLNonNull(GraphQLString) },
         done: { type: GraphQLBoolean }
+    }
+});
+
+const GraphQLGroceryList = new GraphQLObjectType({
+    name: "GroceryList",
+    fields: {
+        listId: { type: GraphQLString }
     }
 });
 
@@ -41,6 +52,10 @@ const schema = new GraphQLSchema({
                 },
                 type: new GraphQLList(GraphQLItem),
                 resolve: (parent, args) => getGroceryList(args.listId)
+            },
+            allGroceryList: {
+                type: new GraphQLList(GraphQLGroceryList),
+                resolve: (parent, args) => getAllGroceryList()
             }
         }
     }),

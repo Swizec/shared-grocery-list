@@ -11,6 +11,7 @@ provider:
               - dynamodb:GetItem
               - dynamodb:UpdateItem
               - dynamodb:PutItem
+              - dynamodb:Scan
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:

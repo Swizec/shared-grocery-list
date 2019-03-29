@@ -26,7 +26,9 @@ const GraphQLItem = new GraphQLObjectType({
 const GraphQLGroceryList = new GraphQLObjectType({
     name: "GroceryList",
     fields: {
-        listId: { type: GraphQLString }
+        listId: { type: GraphQLString },
+        listName: { type: GraphQLString },
+        groceries: { type: new GraphQLList(GraphQLItem) }
     }
 });
 
@@ -50,7 +52,7 @@ const schema = new GraphQLSchema({
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
-                type: new GraphQLList(GraphQLItem),
+                type: GraphQLGroceryList,
                 resolve: (parent, args) => getGroceryList(args.listId)
             },
             allGroceryList: {
@@ -68,14 +70,17 @@ const schema = new GraphQLSchema({
                         name: "listId",
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    listName: {
+                        name: "listName",
+                        type: GraphQLString
+                    },
                     groceries: {
                         name: "groceries",
                         type: new GraphQLList(GraphQLInputItem)
                     }
                 },
                 type: GraphQLString,
-                resolve: (parent, args) =>
-                    changeGroceryList(args.listId, args.groceries)
+                resolve: (parent, args) => changeGroceryList(args)
             }
         }
     })

@@ -42,7 +42,7 @@ const getGroceryList = async listId => {
         Key: { listId }
     });
 
-    return result.Item.groceries;
+    return result.Item;
 };
 
 const getAllGroceryList = async () => {
@@ -55,13 +55,14 @@ const getAllGroceryList = async () => {
     return result.Items;
 };
 
-const changeGroceryList = (listId, groceries) => {
+const changeGroceryList = ({ listId, listName, groceries }) => {
     return updateItem({
         TableName: process.env.DYNAMODB_TABLE,
         Key: { listId },
-        UpdateExpression: "SET groceries = :groceries",
+        UpdateExpression: "SET groceries = :groceries, listName = :listName",
         ExpressionAttributeValues: {
-            ":groceries": groceries
+            ":groceries": groceries,
+            ":listName": listName
         }
     })
         .then(result => "Saved")

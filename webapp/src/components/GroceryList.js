@@ -3,7 +3,7 @@ import { Box, Paragraph, Heading, Input, Flex, Button, styled } from "reakit"
 import { theme } from "styled-tools"
 import posed, { PoseGroup } from "react-pose"
 import gql from "graphql-tag"
-import { useMutation, useApolloClient } from "react-apollo-hooks"
+import { useMutation } from "react-apollo-hooks"
 
 const Title = styled(Input)`
   font-weight: bold;
@@ -113,14 +113,15 @@ const GroceryList = ({ listId, initialState = [] }) => {
 
   const saveList = useMutation(SAVE_QUERY, {
     variables: {
-      listId: listId,
+      listId,
+      listName,
       groceries: list,
     },
   })
 
   useEffect(() => {
     saveList()
-  }, [list.length, list.filter(item => item.done).length])
+  }, [listName, list.length, list.filter(item => item.done).length])
 
   return (
     <Box>
